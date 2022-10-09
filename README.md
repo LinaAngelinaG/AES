@@ -8,12 +8,13 @@
 
 Запуск программы осуществляется по шаблону:
 
-python main.py [DEC/ENC] [FILENAME] [MODE] [KEY]
+python main.py [DEC/ENC] [FILENAME] [MODE] [KEY] [IV]
     
     DEC/ENC    - флаг, по умолчанию оба имеют значение 'False'
     FILENAME   - имя файла, из которого берется строка hex формата для выполнения операции
     MODE       - метод шифрования - ecb по умолчанию - опционально можно установить и в значение cbc
     KEY        - ключ в hex формате
+    IV         - iv значение в hex формате, по умолчанию имеет значение None и требуется только для режима cbc
  
  # ECB
   
@@ -35,8 +36,8 @@ python main.py [DEC/ENC] [FILENAME] [MODE] [KEY]
     
     - для дешифрования
     
-    python main.py --dec=True --filename=in2.txt --mode=cbc --key=dc1456e060
+    python main.py --dec=True --filename=in2.txt --mode=cbc --key=dc1456e060 --iv=dc1456e060
     
     - для шифрования
     
-    python main.py --enc=True --filename=in.txt --mode=cbc --key=dc1456e060
+    python main.py --enc=True --filename=in.txt --mode=cbc --key=dc1456e060 --iv=dc1456e060

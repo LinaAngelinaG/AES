@@ -6,7 +6,9 @@ block_length_bytes = block_length_bits // 8
 
 
 def ecb_dec(plaintext, key):
-    plain = bytearray(plaintext)
+    plaintext = open(plaintext, 'r', encoding='utf-8')
+    plain = bytearray.fromhex(plaintext.readline())
+    plaintext.close()
     blocks_value, point = get_block_val(len(plain))
     result = bytearray()
     key = check_key(key)
@@ -17,11 +19,14 @@ def ecb_dec(plaintext, key):
         last_block = work_last_block(plain[blocks_value * block_length_bytes:])
         last_block = cipher_block_dec(last_block, key)
         result.extend(last_block)
+    print(result.hex())
     return result
 
 
 def cbc_dec(plaintext, key, iv_vector):
-    plain = bytearray(plaintext)
+    plaintext = open(plaintext, 'r', encoding='utf-8')
+    plain = bytearray.fromhex(plaintext.readline())
+    plaintext.close()
     blocks_value, point = get_block_val(len(plain))
     result = bytearray()
     key = check_key(key)
@@ -37,4 +42,5 @@ def cbc_dec(plaintext, key, iv_vector):
         last_block = cipher_block_dec(last_block, key)
         last_block = xor(cur_iv, cipher_block_dec(last_block, key))
         result.extend(last_block)
+    print(result.hex())
     return result

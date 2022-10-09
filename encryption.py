@@ -7,7 +7,9 @@ block_length_bytes = block_length_bits // 8
 
 
 def ecb_enc(plaintext, key):
-    plain = bytearray.fromhex(plaintext)
+    plaintext = open(plaintext, 'r', encoding='utf-8')
+    plain = bytearray.fromhex(plaintext.readline())
+    plaintext.close()
     key = check_key(key)
     blocks_value, point = get_block_val(len(plain))
     result = bytearray()
@@ -19,6 +21,7 @@ def ecb_enc(plaintext, key):
         last_block = work_last_block(plain[blocks_value * block_length_bytes:])
         last_block = cipher_block_enc(last_block, key)
         result.extend(last_block)
+    print(result.hex())
     return result
 
 
@@ -30,7 +33,9 @@ def check_key(key):
 
 
 def cbc_enc(plaintext, key, iv_vector):
-    plain = bytearray.fromhex(plaintext)
+    plaintext = open(plaintext, 'r', encoding='utf-8')
+    plain = bytearray.fromhex(plaintext.readline())
+    plaintext.close()
     key = check_key(key)
     blocks_value, point = get_block_val(len(plain))
     result = bytearray()
@@ -44,6 +49,7 @@ def cbc_enc(plaintext, key, iv_vector):
         cur_iv = xor(last_block, cur_iv)
         cur_iv = cipher_block_enc(cur_iv, key)
         result.extend(cur_iv)
+    print(result.hex())
     return result
 
 

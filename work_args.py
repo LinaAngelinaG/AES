@@ -13,7 +13,7 @@ def work_args():
     parser.add_argument("--filename", type=str)
     parser.add_argument("--mode", default='ecb', type=str)
     parser.add_argument("--key", type=str)
-    parser.add_argument("--iv", default=None, type=int)
+    parser.add_argument("--iv", default=None, type=str)
 
     all_args = parser.parse_args()
 
@@ -29,6 +29,8 @@ def work_args():
             encryption.ecb_enc(filename, key)
         elif mode.__eq__('cbc') and iv is not None:
             encryption.cbc_enc(filename, key, iv)
+        else:
+            raise IOError("Need iv value")
     elif dec:
         if mode.__eq__('ecb'):
             decryption.ecb_dec(filename, key)

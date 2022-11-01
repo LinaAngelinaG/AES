@@ -37,15 +37,11 @@ def shift_bytes_with_s_box(block):
     return new_word
 
 
-def cipher_block_enc(plain_text_block, key):
-    block = xor(key, plain_text_block)
-    round_key = bytearray(2 * block_length_bytes)
-    for i in range(block_length_bytes):
-        round_key[i] = 255 - key[i]
-        round_key[i + block_length_bytes] = key[i] ^ round_key[i]
+def cipher_block_enc(plain_text_block, round_key):
+    block = xor(round_key[:block_length_bytes], plain_text_block)
     for i in range(rounds_value):
         block = shift_bytes_with_s_box(block)  # SubBytes with s-box
-        block = make_one_round_enc(block, round_key[i * block_length_bytes:(i + 1) * block_length_bytes])
+        block = make_one_round_enc(block, round_key[(i + 1) * block_length_bytes:(i + 2) * block_length_bytes])
     return block
 
 
@@ -56,14 +52,10 @@ def xor(key, block):
     return res
 
 
-def cipher_block_dec(plain_text_block, key):
+def cipher_block_dec(plain_text_block, round_key):
     block = plain_text_block
-    round_key = bytearray(2 * block_length_bytes)
-    for i in range(block_length_bytes):
-        round_key[i + block_length_bytes] = 255 - key[i]
-        round_key[i] = key[i] ^ round_key[i + block_length_bytes]
     for i in range(rounds_value):
-        block = make_one_round_dec(block, round_key[i * block_length_bytes:(i + 1) * block_length_bytes])
+        block = make_one_round_dec(block, round_key[(i + 1) * block_length_bytes:(i + 2) * block_length_bytes])
         block = shift_bytes_with_inv_s_box(block)  # SubBytes with s-box
-    block = xor(key, block)
+    block = xor(round_key[:block_length_bytes], block)
     return block
